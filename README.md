@@ -1,6 +1,8 @@
 # Privacy-Preserving Naive Bayesian Classifier
 
-The GPU version of HEaaN code is not available for public release as it is a proprietary asset of CryptoLab. So, these codes are re-constructed by using HEaaN-SDK.
+The GPU version of HEaaN code is not available for public release as it is a proprietary asset of CryptoLab. 
+
+So, these codes are re-constructed by using HEaaN-SDK.
 
 HEaaN-SDK is a package for data science/data analysis under homomorphic encryption using the HEaaN library.
 
