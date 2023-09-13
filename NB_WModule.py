@@ -60,9 +60,9 @@ def data_encrypt(csv_file_path, ctxt_path, cell_col_max_list,context):
         for index in range(data[cname].size):
             msg[index]=data[cname][index]
         if ("Unnamed" not in cname):
-        
             c = msg.encrypt(inplace=False)
             c.save(ctxt_path+cname+".ctxt")
+           
 
     json_opend={}
     json_opend["num_rows"] = len(data)
@@ -115,8 +115,9 @@ def nb_learn(data_ctxt_path,cell_col_max_list,alpha,context, model_ctxt_path):
             cname = str(y_label)+ "count"+p+"_"
         
             out_ctxt = data_cdict[str(y_label)+'Y_'] * data_cdict[p]
-   
+
             check_boot(out_ctxt)
+            
             
             rot_ctxt = rotate_sum(out_ctxt)
             check_boot(rot_ctxt)
@@ -125,11 +126,11 @@ def nb_learn(data_ctxt_path,cell_col_max_list,alpha,context, model_ctxt_path):
             rot_ctxt.save(model_ctxt_path+cname+".ctxt")
 
         yname = str(y_label)+'acountY_'
-    
+        print(yname)
         rot_ctxt2 = rotate_sum(data_cdict[str(y_label)+'Y_'])
         check_boot(rot_ctxt2)
         rot_ctxt2.save(model_ctxt_path+yname+".ctxt")
-        
+
         
     fl = [re.sub('.ctxt','',i) for i in os.listdir(model_ctxt_path)]
     fl = natsort.natsorted(fl)
@@ -138,10 +139,14 @@ def nb_learn(data_ctxt_path,cell_col_max_list,alpha,context, model_ctxt_path):
     
     
     inverse_ctxt, inverse_index = make_inverse_ctxt(model_ctxt_path, context,alpha,col_max_list)
+
+
     
     rotate_ctxt = make_rotate_ctxt(inverse_ctxt,inverse_index,context)
 
+
     m_25_ctxt = make_25_ctxt(rotate_ctxt)
+
     
     msg1 = [0]*num_slot
     for i in range(0,len(inverse_index)*25):
@@ -154,6 +159,7 @@ def nb_learn(data_ctxt_path,cell_col_max_list,alpha,context, model_ctxt_path):
 
     
     find_log_ctxt = make_log_ctxt(m_25_ctxt,inverse_index,model_ctxt_path, context)
+
    
     unit_size = 0
     for i in range(len(col_max_list)-1):
@@ -169,7 +175,6 @@ def nb_learn(data_ctxt_path,cell_col_max_list,alpha,context, model_ctxt_path):
     rs_msg = heaan.Block(context,encrypted=False,data=rs)
     
     final_result = find_log_ctxt * rs_msg
-
 
     final_result = make_25_ctxt(final_result)
     
@@ -345,7 +350,6 @@ def nb_predict(test_ctxt_path,model_ctxt_path, ycn, cell_col_max_list,key_file_p
 
     result_ctxt = result_ctxt * tmp_ctxt2
     check_boot(result_ctxt)
-
     
     if y_class_num != 2:
         final_result = findMaxPos(result_ctxt,context,log_num_slot,y_class_num)
@@ -991,11 +995,11 @@ def _add_one_zero_column(tmp, column_name,n):
             tmp[str(n)+"Y_"] = result        
 
 def load_ctxt(fn_list,ctxt_path,context):
+   
     out_cdict={}
     for cname in fn_list:
-        empty_msg= heaan.Block(context,encrypted = False)
-        ctxt = empty_msg.encrypt(inplace=False)        
-        ctxt = ctxt.load(ctxt_path+cname+".ctxt")
+        empty_msg= heaan.Block(context,encrypted = True)
+        ctxt = empty_msg.load(ctxt_path+cname+".ctxt")      
         out_cdict[cname]=ctxt
     return out_cdict
 
