@@ -47,12 +47,12 @@ The accuracy of the CPU version code is identical to the accuracy of the reporte
 - data_devide.py : devide the test data
 
 ## Key File Setting
-
+```
 keys
 ├─public_keypack
 │  └─PK
 └─secret_keypack
-
+```
 1. Create “keys” folder with this structure
 2. Inside the “PK” folder, extract and place the PK1.tar and PK2.tar files.
 3. Inside the “secret_keypac” folder, extract and place the scretekey.tar file.
