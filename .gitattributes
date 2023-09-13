@@ -1,0 +1,4 @@
+PK1.zip filter=lfs diff=lfs merge=lfs -text
+PK2.zip filter=lfs diff=lfs merge=lfs -text
+PK3.zip filter=lfs diff=lfs merge=lfs -text
+PK4.zip filter=lfs diff=lfs merge=lfs -text
