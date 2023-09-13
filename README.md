@@ -28,7 +28,7 @@ Costs such as communication and time might be different which is represented in 
 |  | D1 | D2 | D3 | D4 |
 | --- | --- | --- | --- | --- |
 | Training Time(seconds) | 93.23 | 75.43 | 84.24 | 60.67 |
-| Inference Time(seconds) | 5.96 ± 0.1 | 8.65 ± 0.05 | 8.62 ± 0.05 |  |
+| Inference Time(seconds) | 5.96 ± 0.1 | 8.65 ± 0.05 | 8.62 ± 0.05 |  35.57 ± 0.61 |
 
 The accuracy of the CPU version code is identical to the accuracy of the reported in the paper.
 
