@@ -53,9 +53,9 @@ keys
 │  └─PK
 └─secret_keypack
 ```
-1. Create “keys” folder with this structure
-2. Inside the “PK” folder, extract and place the PK1.tar and PK2.tar files.
-3. Inside the “secret_keypac” folder, extract and place the scretekey.tar file.
+1. Create directories with this structure
+2. Unzip the "PK1.zip, PK2.zip, PK3.zip, PK4.zip" files and place those inside the "PK" directory
+3. Place the scretekey.bin file inside the "secret_keypack" directory
 
 ## Procedure to Training and Inference the data
 
@@ -74,7 +74,7 @@ keys
     ```
     
 3. Clone this repository in your docker container
-4. According to the instructions in the Key File Setting, create a ‘keys’ directory
+4. According to the instructions in the Key File Setting, Unzip the zip files and create a ‘keys’ directory
 5. Devide the test data : change the directory name in 'data_devide.py’
     
     ```bash
@@ -82,4 +82,4 @@ keys
     
     ```
     
-6. Run shell script
+7. Run shell script
