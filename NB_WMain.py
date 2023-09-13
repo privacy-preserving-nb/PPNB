@@ -1,6 +1,6 @@
 import shutil
 from tabnanny import check
-import NB_WModules
+import NB_WModule
 import pandas as pd
 import os
 import time
@@ -26,7 +26,7 @@ context = heaan.Context(
     params,
     key_dir_path=key_file_path,
     load_keys="all",
-    generate_keys=True,
+    generate_keys=False,
 )
 num_slot = context.num_slots
 log_num_slot = context.log_slots
@@ -42,7 +42,7 @@ def check_result(ctxt_path, y_class_num,datapath,real_):
             continue
         else:
             result_path = ctxt_path+f+'/'
-            results = NB_WModules.decrypt_result(result_path,y_class_num,key_file_path)
+            results = NB_WModule.decrypt_result(result_path,y_class_num,key_file_path)
             return_result.append(results)
     accuracy_sk_he = cal_accuracy_sk_he(return_result,datapath)
     accuracy_sk_real = cal_accuracy_sk_real(real_,datapath)
@@ -71,7 +71,7 @@ def cal_accuracy_sk_real(real_,datapath):
 
     answer = list(catNB.predict(test_X))
     print("answer : ", answer)
-    print("rea; : ",real_)
+    print("real : ",real_)
 
     count = 0
     total = len(answer)
@@ -119,7 +119,7 @@ def car_encrypt():
         test_data = test_data_path+k +'.csv'
         test_ctxt_path = './car_ctxt/test/'+str(j)+'/'
         ea = time.time()
-        NB_WModules.inference_encrypt(test_data,test_ctxt_path,cell_col_max_list_car,context)
+        NB_WModule.inference_encrypt(test_data,test_ctxt_path,cell_col_max_list_car,context)
         eb = time.time()
         print("testdata encrypt time per 1: ",eb-ea)
         testdata_time.append(eb-ea)
@@ -146,52 +146,44 @@ def car_check(n):
         real_ = [1, 2, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 3, 1, 4, 1, 1, 2, 2, 3, 1, 2, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 2, 1, 2, 2, 4, 1, 3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 3, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 1, 1, 3, 2, 1, 1, 2, 4, 2, 1, 2, 4, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 1, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 4, 1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1, 1, 2, 1, 1, 1, 1, 1, 4, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 4, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 4, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 4, 2, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 1, 1, 1, 1, 4, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 2, 1, 1, 1, 2, 2, 4, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 4, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 2, 1, 3, 1, 2, 1, 1, 1, 2, 1, 1, 2, 2, 1, 2, 1, 4, 1, 2, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 1, 3, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 4, 1, 1, 1, 3, 1, 1, 4, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 3, 1, 2, 1, 1, 1, 2, 1, 1, 3, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 4, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 2, 1, 1, 4, 2, 1, 2, 3, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 3, 2, 1, 2, 1, 1, 2, 1, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 4, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 3, 2, 1, 2, 2, 2, 3, 1, 2, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 4, 2, 2, 1, 1, 2, 1, 1, 1, 3, 1, 2, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 3, 1, 2, 1, 1, 4, 1, 4, 2, 4, 1, 1, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 3, 2, 2, 1, 4, 1, 1, 1, 4, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 4, 1, 1, 1, 3, 1, 1, 1, 2, 2, 4, 4, 1, 1, 1, 2, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 2, 1, 1, 1, 4, 1, 2, 1, 1, 1, 3, 1, 1, 2, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1, 1, 3, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 2, 4, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 3, 1, 2, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 3, 1, 2, 2, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 4, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 2, 2, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 3, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 4, 1, 2, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 2, 4, 1, 2, 2, 1, 1, 1, 4, 1, 1, 1, 1, 1, 2, 1, 2, 1, 4, 1, 1, 1, 1, 3, 1, 2, 1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 3, 1, 1, 1, 2, 1, 2, 1, 3, 1, 2, 3, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 1, 1, 4, 1, 1, 1, 1, 1, 2, 4, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 3, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 4, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 3, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 3, 2, 3, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 4, 1, 1, 1, 1, 4, 1, 1, 4, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2, 2, 4, 2, 1, 4, 2, 3, 1, 1, 1, 1, 2, 2, 1, 4, 1, 1, 2, 1, 2, 2, 1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1, 2, 1, 2, 1, 1, 1, 2, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 4, 1, 1, 2, 1, 1, 2, 2, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 4, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 1, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 2, 1, 2, 2, 3, 1, 1, 1, 1, 2, 1, 4, 1, 1, 4, 2, 3, 1, 1, 1, 4, 1, 1, 1, 1, 1, 2, 3, 1, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 1, 1, 2, 4, 1, 2, 1, 2, 4, 2, 1, 2, 1, 2, 1, 4, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 4, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 4, 2]
         result = {}
  
-        for nn in range(n,n+3) : 
-            print("##PROVIDER")
-            pa = time.time()
-            NB_WModules.data_encrypt(csv_data_path,data_ctxt_path,cell_col_max_list_car,context)
-            pb = time.time()
-            print("data encrypt time : ", pb-pa)
-            infer_result = {}
-            print(n, "th experiment")
+        print("##PROVIDER")
+        pa = time.time()
+        NB_WModule.data_encrypt(csv_data_path,data_ctxt_path,cell_col_max_list_car,context)
+        pb = time.time()
+        print("data encrypt time : ", pb-pa)
+        infer_result = {}
 
-            print("##LEARNING")
-            la = time.time()
-            NB_WModules.nb_learn(data_ctxt_path,cell_col_max_list_car,alpha,context, model_ctxt_path)
-            lb = time.time()
-            print("learning total time : ", lb-la)
-            learning_time_.append(lb-la)
+        print("##LEARNING")
+        la = time.time()
+        NB_WModule.nb_learn(data_ctxt_path,cell_col_max_list_car,alpha,context, model_ctxt_path)
+        lb = time.time()
+        print("learning total time : ", lb-la)
+        learning_time_.append(lb-la)
+  
+        inference_time=[]
+        for j,k in enumerate(file_list):
+            test_ctxt_path = './car_ctxt/test/'+str(j)+'/'
+            ra = time.time()
+            NB_WModule.nb_predict(test_ctxt_path,model_ctxt_path,y_class_num,cell_col_max_list_car,key_file_path)
+            rb = time.time()
+            print("predict time ",j,' data', rb-ra)
+            inference_time.append(rb-ra)
+        inference_time = inference_time[1:]
+        infer_result["Inference time"] = inference_time
+        infer_result["Inference time avg"] = np.mean(inference_time)
+        infer_result["Inference time var"] = np.var(inference_time)
+        infer_result["Inference time std"] = np.std(inference_time)
 
-            inference_time=[]
-            for j,k in enumerate(file_list):
-                test_ctxt_path = './car_ctxt/test/'+str(j)+'/'
-                ra = time.time()
-                NB_WModules.nb_predict(test_ctxt_path,model_ctxt_path,y_class_num,cell_col_max_list_car,key_file_path)
-                rb = time.time()
-                print("predict time ",j,' data', rb-ra)
-                inference_time.append(rb-ra)
-            inference_time = inference_time[1:]
-            infer_result["Inference time"] = inference_time
-            infer_result["Inference time avg"] = np.mean(inference_time)
-            infer_result["Inference time var"] = np.var(inference_time)
-            infer_result["Inference time std"] = np.std(inference_time)
+        accuracy_sk_he, accuracy_sk_real, accuracy_he_real = check_result('./car_ctxt/test/',y_class_num,datapath,real_)
+        infer_result["he-sk Accuracy"] = accuracy_sk_he
+        infer_result["real-sk Accuracy"] = accuracy_sk_real
+        infer_result["real-he Accuracy"] = accuracy_he_real
 
-            accuracy_sk_he, accuracy_sk_real, accuracy_he_real = check_result('./car_ctxt/test/',y_class_num,datapath,real_)
-            infer_result["he-sk Accuracy"] = accuracy_sk_he
-            infer_result["real-sk Accuracy"] = accuracy_sk_real
-            infer_result["real-he Accuracy"] = accuracy_he_real
-
-            with open(path100+str(nn)+'Inference0913.json', 'w') as f :
-                f.write(json.dumps(infer_result, sort_keys=True, indent=4, separators=(',', ': ')))
-            shutil.rmtree(model_ctxt_path)
-            shutil.rmtree(data_ctxt_path)
-        
-        learning_time_ = learning_time_[1:]
-        result["learning time avg "] = learning_time_
-        result["learning time var "] = np.var(learning_time_)
-        result["learning time std "] = np.std(learning_time_)
-        with open(path100+str(n)+'learningTime.json', 'w') as f :
-                f.write(json.dumps(result, sort_keys=True, indent=4, separators=(',', ': ')))
+        with open(path100+str(n)+'Inference0913.json', 'w') as f :
+            f.write(json.dumps(infer_result, sort_keys=True, indent=4, separators=(',', ': ')))
+        shutil.rmtree(model_ctxt_path)
+        shutil.rmtree(data_ctxt_path)
+    
 
 def cancer_encrypt():
     cell_col_max_list_cancer = '10,10,10,10,10,10,10,10,10,2'
@@ -209,7 +201,7 @@ def cancer_encrypt():
         test_data = test_data_path+k +'.csv'
         test_ctxt_path = './cancer_ctxt/test/'+str(j)+'/'
         ea = time.time()
-        NB_WModules.inference_encrypt(test_data,test_ctxt_path,cell_col_max_list_cancer,context)
+        NB_WModule.inference_encrypt(test_data,test_ctxt_path,cell_col_max_list_cancer,context)
         eb = time.time()
         print("testdata encrypt time per 1: ",eb-ea)
         testdata_time.append(eb-ea)
@@ -236,56 +228,47 @@ def cancer_check(n):
 
         real_=[2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 1, 2, 1, 1, 2, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2, 1, 2, 1, 2, 2, 1, 2, 2, 1, 1, 2, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1]
         result = {}
-        
-        for nn in range(n,n+3):
-            print("##PROVIDER")
-            pa = time.time()
-            NB_WModules.data_encrypt(csv_data_path,data_ctxt_path,cell_col_max_list_cancer,context)
-            pb = time.time()
-            print("data encrypt time : ", pb-pa)
-            result["train data encrypt time"] = pb-pa
+   
+        print("##PROVIDER")
+        pa = time.time()
+        NB_WModule.data_encrypt(csv_data_path,data_ctxt_path,cell_col_max_list_cancer,context)
+        pb = time.time()
+        print("data encrypt time : ", pb-pa)
+        result["train data encrypt time"] = pb-pa
 
-            infer_result = {}
-            print(n, "th experiment")
+        infer_result = {}
 
-            print("##LEARNING")
-            la = time.time()
-            NB_WModules.nb_learn(data_ctxt_path, cell_col_max_list_cancer,alpha,context, model_ctxt_path)
-            lb = time.time()
-            print("learning total time : ", lb-la)
-            learning_time_.append(lb-la)
+        print("##LEARNING")
+        la = time.time()
+        NB_WModule.nb_learn(data_ctxt_path, cell_col_max_list_cancer,alpha,context, model_ctxt_path)
+        lb = time.time()
+        print("learning total time : ", lb-la)
 
-            print("##INFERENCE")
-            inference_time=[]
-            for j,k in enumerate(file_list):
-                test_ctxt_path = './cancer_ctxt/test/'+str(j)+'/'
-                ra = time.time()
-                NB_WModules.nb_predict(test_ctxt_path,model_ctxt_path,y_class_num,cell_col_max_list_cancer,key_file_path)
-                rb = time.time()
-                print("predict time ",j,' data', rb-ra)
-                inference_time.append(rb-ra)
-            inference_time = inference_time[1:]
-            infer_result["Inference time"] = inference_time
-            infer_result["Inference time avg"] = np.mean(inference_time)
-            infer_result["Inference time var"] = np.var(inference_time)
-            infer_result["Inference time std"] = np.std(inference_time)
+        print("##INFERENCE")
+        inference_time=[]
+        for j,k in enumerate(file_list):
+            test_ctxt_path = './cancer_ctxt/test/'+str(j)+'/'
+            ra = time.time()
+            NB_WModule.nb_predict(test_ctxt_path,model_ctxt_path,y_class_num,cell_col_max_list_cancer,key_file_path)
+            rb = time.time()
+            print("predict time ",j,' data', rb-ra)
+            inference_time.append(rb-ra)
+        inference_time = inference_time[1:]
+        infer_result["Inference time"] = inference_time
+        infer_result["Inference time avg"] = np.mean(inference_time)
+        infer_result["Inference time var"] = np.var(inference_time)
+        infer_result["Inference time std"] = np.std(inference_time)
 
-            accuracy_sk_he, accuracy_sk_real, accuracy_he_real = check_result('./cancer_ctxt/test/',y_class_num,datapath,real_)
-            infer_result["he-sk Accuracy"] = accuracy_sk_he
-            infer_result["real-sk Accuracy"] = accuracy_sk_real
-            infer_result["real-he Accuracy"] = accuracy_he_real
+        accuracy_sk_he, accuracy_sk_real, accuracy_he_real = check_result('./cancer_ctxt/test/',y_class_num,datapath,real_)
+        infer_result["he-sk Accuracy"] = accuracy_sk_he
+        infer_result["real-sk Accuracy"] = accuracy_sk_real
+        infer_result["real-he Accuracy"] = accuracy_he_real
 
-            with open(path100+str(nn)+'Inference.json', 'w') as f :
-                f.write(json.dumps(infer_result, sort_keys=True, indent=4, separators=(',', ': ')))
-            shutil.rmtree(model_ctxt_path)
-            shutil.rmtree(data_ctxt_path)
-        
-        learning_time_ = learning_time_[1:]
-        result["learning time avg "] = learning_time_
-        result["learning time var "] = np.var(learning_time_)
-        result["learning time std "] = np.std(learning_time_)
-        with open(path100+str(n)+'learningTime.json', 'w') as f :
-            f.write(json.dumps(result, sort_keys=True, indent=4, separators=(',', ': ')))
+        with open(path100+str(n)+'Inference.json', 'w') as f :
+            f.write(json.dumps(infer_result, sort_keys=True, indent=4, separators=(',', ': ')))
+        shutil.rmtree(model_ctxt_path)
+        shutil.rmtree(data_ctxt_path)
+
 
 
 def a1_encrypt():
@@ -303,7 +286,7 @@ def a1_encrypt():
         test_data = test_data_path+k +'.csv'
         test_ctxt_path = './a1_ctxt/test/'+str(j)+'/'
         ea = time.time()
-        NB_WModules.inference_encrypt(test_data,test_ctxt_path,cell_col_max_list_a1,context)
+        NB_WModule.inference_encrypt(test_data,test_ctxt_path,cell_col_max_list_a1,context)
         eb = time.time()
         print("testdata encrypt time per 1: ",eb-ea)
         testdata_time.append(eb-ea)
@@ -332,55 +315,50 @@ def a1_check(n):
 
         real_=[2, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 2, 2, 1, 1, 1, 2, 1, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1]
         result = {}
-        for nn in range(n,n+3):
-            print("##PROVIDER")
-            pa = time.time()
-            NB_WModules.data_encrypt(csv_data_path,data_ctxt_path,cell_col_max_list_a1,context)
-            pb = time.time()
-            print("data encrypt time : ", pb-pa)
-            result["train data encrypt time"] = pb-pa
+        
+        # for nn in range(n,n+6):
+        print("##PROVIDER")
+        pa = time.time()
+        NB_WModule.data_encrypt(csv_data_path,data_ctxt_path,cell_col_max_list_a1,context)
+        pb = time.time()
+        print("data encrypt time : ", pb-pa)
+        result["train data encrypt time"] = pb-pa
 
-            infer_result = {}
-            print(nn, "th experiment")
+        infer_result = {}
 
-            print("##LEARNING")
-            la = time.time()
-            NB_WModules.nb_learn(data_ctxt_path, cell_col_max_list_a1,alpha,context, model_ctxt_path)
-            lb = time.time()
-            print("learning total time : ", lb-la)
-            learning_time_.append(lb-la)
-            print("##Inference")
-            inference_time=[]
-            for j,k in enumerate(file_list):
-                test_ctxt_path = './a1_ctxt/test/'+str(j)+'/'
-                ra = time.time()
-                NB_WModules.nb_predict(test_ctxt_path,model_ctxt_path,y_class_num,cell_col_max_list_a1,key_file_path)
-                rb = time.time()
-                inference_time.append(rb-ra)
-                print("predict time ",j,' data', rb-ra)
-            
-            inference_time = inference_time[1:]
-            infer_result["Inference time"] = inference_time
-            infer_result["Inference time avg"] = np.mean(inference_time)
-            infer_result["Inference time var"] = np.var(inference_time)
-            infer_result["Inference time std"] = np.std(inference_time)
+        print("##LEARNING")
+        la = time.time()
+        NB_WModule.nb_learn(data_ctxt_path, cell_col_max_list_a1,alpha,context, model_ctxt_path)
+        lb = time.time()
+        print("learning total time : ", lb-la)
+        learning_time_.append(lb-la)
 
-            accuracy_sk_he, accuracy_sk_real, accuracy_he_real = check_result('./a1_ctxt/test/',y_class_num,datapath,real_)
-            infer_result["he-sk Accuracy"] = accuracy_sk_he
-            infer_result["real-sk Accuracy"] = accuracy_sk_real
-            infer_result["real-he Accuracy"] = accuracy_he_real
+        print("##Inference")
+        inference_time=[]
+        for j,k in enumerate(file_list):
+            test_ctxt_path = './a1_ctxt/test/'+str(j)+'/'
+            ra = time.time()
+            NB_WModule.nb_predict(test_ctxt_path,model_ctxt_path,y_class_num,cell_col_max_list_a1,key_file_path)
+            rb = time.time()
+            inference_time.append(rb-ra)
+            print("predict time ",j,' data', rb-ra)
 
-            with open(path100+str(nn)+'Inference.json', 'w') as f :
-                f.write(json.dumps(infer_result, sort_keys=True, indent=4, separators=(',', ': ')))
-            shutil.rmtree(model_ctxt_path)
-            shutil.rmtree(data_ctxt_path)
-            
-        learning_time_ = learning_time_[1:]
-        result["learning time avg "] = learning_time_
-        result["learning time var "] = np.var(learning_time_)
-        result["learning time std "] = np.std(learning_time_)
-        with open(path100+str(n)+'learningTime.json', 'w') as f :
-            f.write(json.dumps(result, sort_keys=True, indent=4, separators=(',', ': ')))
+        inference_time = inference_time[1:]
+        infer_result["Inference time"] = inference_time
+        infer_result["Inference time avg"] = np.mean(inference_time)
+        infer_result["Inference time var"] = np.var(inference_time)
+        infer_result["Inference time std"] = np.std(inference_time)
+
+        accuracy_sk_he, accuracy_sk_real, accuracy_he_real = check_result('./a1_ctxt/test/',y_class_num,datapath,real_)
+        infer_result["he-sk Accuracy"] = accuracy_sk_he
+        infer_result["real-sk Accuracy"] = accuracy_sk_real
+        infer_result["real-he Accuracy"] = accuracy_he_real
+
+        with open(path100+str(n)+'Inference.json', 'w') as f :
+            f.write(json.dumps(infer_result, sort_keys=True, indent=4, separators=(',', ': ')))
+        shutil.rmtree(model_ctxt_path)
+        shutil.rmtree(data_ctxt_path)
+
             
 
        
@@ -402,7 +380,7 @@ def a2_encrypt():
         test_data = test_data_path+k +'.csv'
         test_ctxt_path = './a2_ctxt/test/'+str(j)+'/'
         ea = time.time()
-        NB_WModules.inference_encrypt(test_data,test_ctxt_path,cell_col_max_list_a2,context)
+        NB_WModule.inference_encrypt(test_data,test_ctxt_path,cell_col_max_list_a2,context)
         eb = time.time()
         print("testdata encrypt time per 1: ",eb-ea)
         testdata_time.append(eb-ea)
@@ -430,56 +408,49 @@ def a2_check(n):
         real_=[2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1, 2]
         result = {}
 
-        for nn in range(n,n+3) :
-            print("##PROVIDER")
-            pa = time.time()
-            NB_WModules.data_encrypt(csv_data_path,data_ctxt_path,cell_col_max_list_a2,context)
-            pb = time.time()
-            print("data encrypt time : ", pb-pa)
-            result["train data encrypt time"] = pb-pa
+        print("##PROVIDER")
+        pa = time.time()
+        NB_WModule.data_encrypt(csv_data_path,data_ctxt_path,cell_col_max_list_a2,context)
+        pb = time.time()
+        print("data encrypt time : ", pb-pa)
+        result["train data encrypt time"] = pb-pa
 
-            infer_result = {}
-            print(n, "th experiment")
+        infer_result = {}
 
-            print("##LEARNING")
-            la = time.time()
-            NB_WModules.nb_learn(data_ctxt_path, cell_col_max_list_a2,alpha,context, model_ctxt_path)
-            lb = time.time()
-            print("learning total time : ", lb-la)
-            learning_time_.append(lb-la)
-            
-            print("##Inference")
-            inference_time=[]
-            for j,k in enumerate(file_list):
+        print("##LEARNING")
+        la = time.time()
+        NB_WModule.nb_learn(data_ctxt_path, cell_col_max_list_a2,alpha,context, model_ctxt_path)
+        lb = time.time()
+        print("learning total time : ", lb-la)
+        learning_time_.append(lb-la)
+        
+        print("##Inference")
+        inference_time=[]
+        for j,k in enumerate(file_list):
 
-                test_ctxt_path = './a2_ctxt/test/'+str(j)+'/'
-                ra = time.time()
-                NB_WModules.nb_predict(test_ctxt_path,model_ctxt_path,y_class_num,cell_col_max_list_a2,key_file_path)
-                rb = time.time()
-                print("predict time ",j,' data', rb-ra)
-                inference_time.append(rb-ra)
-                
-            inference_time = inference_time[1:]
-            infer_result["Inference time"] = inference_time
-            infer_result["Inference time avg"] = np.mean(inference_time)
-            infer_result["Inference time var"] = np.var(inference_time)
-            infer_result["Inference time std"] = np.std(inference_time)
+            test_ctxt_path = './a2_ctxt/test/'+str(j)+'/'
+            ra = time.time()
+            NB_WModule.nb_predict(test_ctxt_path,model_ctxt_path,y_class_num,cell_col_max_list_a2,key_file_path)
+            rb = time.time()
+            print("predict time ",j,' data', rb-ra)
+            inference_time.append(rb-ra)
 
-            accuracy_sk_he, accuracy_sk_real, accuracy_he_real = check_result('./a2_ctxt/test/',y_class_num,datapath,real_)
-            infer_result["he-sk Accuracy"] = accuracy_sk_he
-            infer_result["real-sk Accuracy"] = accuracy_sk_real
-            infer_result["real-he Accuracy"] = accuracy_he_real
+        inference_time = inference_time[1:]
+        infer_result["Inference time"] = inference_time
+        infer_result["Inference time avg"] = np.mean(inference_time)
+        infer_result["Inference time var"] = np.var(inference_time)
+        infer_result["Inference time std"] = np.std(inference_time)
 
-            with open(path100+str(nn)+'Inference.json', 'w') as f :
-                f.write(json.dumps(infer_result, sort_keys=True, indent=4, separators=(',', ': ')))
-            shutil.rmtree(model_ctxt_path)
-            shutil.rmtree(data_ctxt_path)
-            
-        learning_time_ = learning_time_[1:]
-        result["learning time avg "] = learning_time_
-        result["learning time var "] = np.var(learning_time_)
-        result["learning time std "] = np.std(learning_time_)
-        with open(path100+str(n)+'learningTime.json', 'w') as f :
-            f.write(json.dumps(result, sort_keys=True, indent=4, separators=(',', ': ')))
+        accuracy_sk_he, accuracy_sk_real, accuracy_he_real = check_result('./a2_ctxt/test/',y_class_num,datapath,real_)
+        infer_result["he-sk Accuracy"] = accuracy_sk_he
+        infer_result["real-sk Accuracy"] = accuracy_sk_real
+        infer_result["real-he Accuracy"] = accuracy_he_real
+
+        with open(path100+str(n)+'Inference.json', 'w') as f :
+            f.write(json.dumps(infer_result, sort_keys=True, indent=4, separators=(',', ': ')))
+        shutil.rmtree(model_ctxt_path)
+        shutil.rmtree(data_ctxt_path)
+
+
         
     
